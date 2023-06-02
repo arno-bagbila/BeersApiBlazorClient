@@ -1,0 +1,93 @@
+﻿@page "/flavours"
+@using BeersApiBlazorClient.Elements
+@inherits BeersApiBlazorClient.Pages.CodeBehind.FlavourOverviewBase
+
+@if (ShowError)
+{
+    <div class="alert alert-danger" role="alert" id="@ElementIds.FlavourOverviewError">
+        <p>@Error</p>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-11"><h4 id="@ElementIds.FlavourOverviewTitle">Flavours</h4></div>
+
+    @if (BeersApiRole == "BeersApiAdmin")
+    {
+        <div class="col-md-2" id="@ElementIds.FlavourOverviewAddFlavourButton">
+            <RadzenButton Icon="add_task" Text="Add" Size="ButtonSize.Medium" Click="@(args => DialogService.OpenAsync<AddFlavourDialog>("Add Flavour", new Dictionary<string, object>() {}, new DialogOptions() {Width = "600px", Height = "300px"}))"></RadzenButton>
+        </div>
+    }
+
+</div>
+
+<br />
+
+@if (Flavours == null || !Flavours.Any())
+{
+    <p><em id="@ElementIds.FlavourOverviewLoading">Loading...</em></p>
+}
+else
+{
+    <div id="@ElementIds.FlavourOverviewGrid">
+        <RadzenGrid @ref="FlavoursGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="20"
+                    AllowSorting="true" Data="@Flavours" TItem="Models.Input.Flavours.Flavour" RowUpdate="@OnUpdateRow" ColumnWidth="200px">
+            <Columns>
+                <RadzenGridColumn Width="30px" TItem="Models.Input.Flavours.Flavour" Property="Name" Title="Name">
+                    <EditTemplate Context="flavour">
+                        <RadzenTextBox @bind-Value="flavour.Name" Style="width:100%; display: block" Name="Name" />
+                        <RadzenRequiredValidator Text="Name is required" Component="Name" />
+                    </EditTemplate>
+                </RadzenGridColumn>
+
+                <RadzenGridColumn TItem="Models.Input.Flavours.Flavour" Property="Description" Title="Description">
+                    <Template Context="data">
+                        <p style="white-space:pre-wrap">@data.Description</p>
+                    </Template>
+                </RadzenGridColumn>
+                <RadzenGridColumn Width="20px" TItem="Models.Input.Flavours.Flavour" Title="Beers" TextAlign="TextAlign.Center">
+                    <Template Context="flavour">
+                        <div>
+                            <RadzenButton Text="Beers" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Info">
+                            </RadzenButton>
+                        </div>
+                    </Template>
+                </RadzenGridColumn>
+                @if (BeersApiRole == "BeersApiAdmin")
+                {
+                    <div id="@ElementIds.FlavourOverviewGridAdmin">
+                        <RadzenGridColumn Width="25px" TItem="Models.Input.Flavours.Flavour" Title="Edit" TextAlign="TextAlign.Center">
+                            <Template Context="flavour">
+                                <div id="@ElementIds.FlavourOverviewGridAdminEditButton">
+                                    <RadzenButton Text="Edit" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Warning" Icon="edit" Click="@(args => EditRow(flavour))"></RadzenButton>
+                                </div>
+                            </Template>
+                            <EditTemplate Context="flavour">
+                                <div id="@ElementIds.FlavourOverviewGridAdminSaveButton">
+                                    <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(flavour))"></RadzenButton>
+                                </div>
+                                <div id="@ElementIds.FlavourOverviewGridAdminCancelButton">
+                                    <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => CancelEdit(flavour))"></RadzenButton>
+                                </div>
+                            </EditTemplate>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="25px" TItem="Models.Input.Flavours.Flavour" Title="Delete" TextAlign="TextAlign.Center">
+                            <Template Context="flavour">
+                                <div id="@ElementIds.FlavourOverviewGridAdminDeleteButton">
+                                    <RadzenButton Text="Delete" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Danger" Icon="delete_forever"
+                                                  Click="@((args) => ShowConfirmDeleteFlavourDialog(flavour))"></RadzenButton>
+                                </div>
+                            </Template>
+                        </RadzenGridColumn>
+                    </div>
+                }
+
+            </Columns>
+        </RadzenGrid>
+    </div>
+
+    <br />
+}
+
+
+

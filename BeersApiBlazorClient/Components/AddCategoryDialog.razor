@@ -1,0 +1,47 @@
+﻿@inherits AddCategoryDialogBase
+
+@if (ShowDialog)
+ {
+    <div class="modal fade show d-block" id="addCategoryModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @if (ShowError)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <p>@Error</p>
+                    </div>
+                }
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleLabel">Add Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@Category" OnValidSubmit="@HandleValidSubmit">
+
+                        <FluentValidationValidator />
+                        <ValidationSummary />
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <InputText id="name" class="form-control" @bind-Value="@Category.Name" placeholder="Enter category name" />
+                            <ValidationMessage For="@(() => Category.Name)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" class="form-control" @bind-value="@Category.Description" @bind-value:event="oninput"></textarea>
+                            <ValidationMessage For="@(() => Category.Description)" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save category</button>
+                        <a class="btn btn-outline-primary" @onclick="@Close">Close</a>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ }
+
+

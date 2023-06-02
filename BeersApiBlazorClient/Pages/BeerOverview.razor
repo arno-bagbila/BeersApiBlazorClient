@@ -1,0 +1,48 @@
+﻿@page "/beers"
+@using BeersApiBlazorClient.Elements
+@inherits BeersApiBlazorClient.Pages.CodeBehind.BeerOverviewBase
+
+@if (ShowError)
+{
+    <div class="alert alert-danger" role="alert" id="@ElementIds.BeerOverviewError">
+        <p>@Error</p>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-11"><h4 id="@ElementIds.BeerOverviewTitle">Beers</h4></div>
+
+    @if (BeersApiRole == "BeersApiAdmin")
+    {
+        <div class="col-md-1" id="@ElementIds.BeerOverviewAddBeerButton">
+            <RadzenButton Icon="add_circle" Style="margin-bottom: 20px; width: 80px" Click="@(args => DialogService.OpenAsync<AddBeerDialog>("Add Beer",
+                                                                                                new Dictionary<string, object>(){},
+                                                                                                new DialogOptions()))"></RadzenButton>
+        </div>
+    }
+
+</div>
+<br />
+
+
+@if (Beers == null || !Beers.Any())
+{
+    <p><em id="@ElementIds.BeerLoadingId">Loading ...</em></p>
+}
+else
+{
+    <div id="@ElementIds.BeerOverviewBeersListing">
+
+        @foreach (var beer in Beers)
+        {
+            <img src=@beer.LogoUrl class="img-thumbnail"
+                 alt=@beer.Name style="height: 200px; width: 200px; cursor: pointer"
+                 @onclick="@((args) => ShowBeerDialog(beer, BeersApiRole))" title="@beer.Name" id="@ElementIds.BeerOverviewBeer">
+        }
+    </div>
+
+}
+
+
+
+

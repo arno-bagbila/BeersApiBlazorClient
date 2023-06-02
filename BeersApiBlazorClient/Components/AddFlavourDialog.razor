@@ -1,0 +1,41 @@
+﻿@using BeersApiBlazorClient.Models.Output.Flavours
+@inherits AddFlavourDialogBase
+
+
+<RadzenTemplateForm Data="@Flavour" Submit="@(async(Flavour flavour) => { await Submit(flavour); })">    
+    
+    @if (ShowError)
+    {
+        <div class="alert alert-danger" role="alert">
+            <p>@Error</p>
+        </div>
+    }
+    
+    <div class="row">
+        <div class="col-md-2 align-items-center d-flex">
+            <RadzenLabel Text="Name"/>
+        </div>
+        <div class="col-md-10">
+            <RadzenTextBox style="width: 100%;" Name="Name" @bind-Value="Flavour.Name" />
+            <RadzenRequiredValidator Component="Name" Text="Name is required" Popup="false" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2 align-items-center d-flex">
+            <RadzenLabel Text="Description"/>
+        </div>
+        <div class="col-md-10">
+            <RadzenTextArea style="width: 100%;" Name="Description" @bind-Value="Flavour.Description" />
+            <RadzenRequiredValidator Component="Description" Text="Description is required" Popup="false" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" Style="margin-bottom: 10px; width: 150px" />
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Style="margin-bottom: 10px; width: 150px" Text="Cancel" Click="@((args) => DialogService.Close(false))" />
+        </div>
+    </div>
+
+</RadzenTemplateForm>

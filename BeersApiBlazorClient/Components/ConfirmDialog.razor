@@ -1,0 +1,11 @@
+﻿@inherits ConfirmDialogBase
+
+<RadzenCard Style="padding: 10px;">
+    <p Style="margin-bottom: 10px;">@Message</p>
+    <div class="row">
+        <div class="col-md-12">
+            <RadzenButton Text="Ok" Click="()=> DialogService.Close(true)" Style="margin-bottom: 10px; width: 150px" />
+            <RadzenButton Text="Cancel" Click="()=> DialogService.Close(false)" ButtonStyle="ButtonStyle.Secondary"  Style="margin-bottom: 10px; width: 150px"/>
+        </div>
+    </div>
+</RadzenCard>

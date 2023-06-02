@@ -1,0 +1,119 @@
+﻿@using BeersApiBlazorClient.Models.Output.Beers
+@inherits AddBeerDialogBase
+
+<RadzenTemplateForm Data="@Beer" Submit="@(async(Beer beer) => { await Submit(beer); })">
+    @if (ShowError)
+    {
+        <div class="alert alert-danger" role="alert">
+            <p>@Error</p>
+        </div>
+    }
+    
+    <div class="row">
+        <div class="col-md-2 align-items-center d-flex">
+            <RadzenLabel Text="Name"/>
+        </div>
+        <div class="col-md-10">
+            <RadzenTextBox style="width: 100%;" Name="Name" @bind-Value="Beer.Name" />
+            <RadzenRequiredValidator Component="Name" Text="Name is required" Popup="false" />
+            <RadzenLengthValidator Component="Name" Min="3" Text="Name should be at least 3 characters" />
+            <RadzenLengthValidator Component="Name" Max="50" Text="Name should be at most 50 characters" />
+        </div>
+    </div>
+    <div class="row"  style="margin-top: 20px">
+        <div class="col-md-2 align-items-center d-flex">
+            <RadzenLabel Text="Alcohol Level"/>
+        </div>
+        <div class="col-md-10">
+            <RadzenNumeric style="width: 100%;" Name="AlcoholLevel" @bind-Value="Beer.AlcoholLevel" />
+            <RadzenNumericRangeValidator Component="AlcoholLevel" Min="0" Max="100" Text="Alcohol Level should be between 0 and 100" Popup="false" />
+        </div>
+    </div>
+    <div class="row"  style="margin-top: 20px">
+        <div class="col-md-2 align-items-center d-flex">
+            <RadzenLabel Text="Tiwoo Rating"/>
+        </div>
+        <div class="col-md-10">
+            <RadzenNumeric style="width: 100%;" Name="TiwooRating" @bind-Value="Beer.TiwooRating" />
+            <RadzenNumericRangeValidator Component="TiwooRating" Min="0" Max="5" Text="Tiwoo Rating should be between 0 and 5" Popup="false" />
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-2 align-items-center d-flex">
+            <RadzenLabel Text="Category" />
+        </div>
+        <div class="col-md-10">
+            <RadzenDropDownDataGrid TValue="int" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith"
+                                    AllowFiltering="true" AllowClear="true" @bind-Value="Beer.CategoryId" Data="@Categories" TextProperty="Name" 
+                                    ValueProperty="Id" Style="width: 100%;" Name="CategoryId">
+            </RadzenDropDownDataGrid>
+            <RadzenNumericRangeValidator Component="CategoryId" Min="1" Text="Select a valid beer category" Popup="false" />
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-2 align-items-center d-flex">
+            <RadzenLabel Text="Color" />
+        </div>
+        <div class="col-md-10">
+            <RadzenDropDownDataGrid TValue="int" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith"
+                                    AllowFiltering="true" AllowClear="true" @bind-Value="Beer.ColorId" Data="@Colors" TextProperty="Name" 
+                                    ValueProperty="Id" Style="width: 100%;" Name="ColorId">
+            </RadzenDropDownDataGrid>
+            <RadzenNumericRangeValidator Component="ColorId" Min="1" Text="Select a valid beer color" Popup="false" />
+        </div>
+
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-2 align-items-center d-flex">
+            <RadzenLabel Text="Country" />
+        </div>
+        <div class="col-md-10">
+            <RadzenDropDownDataGrid TValue="int" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith"
+                                    AllowFiltering="true" AllowClear="true" @bind-Value="Beer.CountryId" Data="@Countries" TextProperty="Name" 
+                                    ValueProperty="Id" Style="width: 100%;" Name="CountryId">
+            </RadzenDropDownDataGrid>
+            <RadzenNumericRangeValidator Component="CountryId" Min="1" Text="Select a valid country of origin for the beer" Popup="false" />
+        </div>
+
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-2 align-items-center d-flex">
+            <RadzenLabel Text="Flavours" />
+        </div>
+        <div class="col-md-10">
+            <RadzenDropDownDataGrid FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith"
+                            AllowFiltering="true" AllowClear="true" @bind-Value="Beer.FlavourIds" Multiple="true" Data="@Flavours" TextProperty="Name" 
+                            ValueProperty="Id" Style="width: 100%;" Name="FlavourIds">
+            </RadzenDropDownDataGrid>
+        </div>
+    </div>
+    <div style="margin-top: 20px">
+        <div>
+            <RadzenLabel Text="Logo" />
+        </div>
+        <div>
+            <RadzenFileInput @bind-Value="@LogoUrlString" Style="width:400px;" TValue="string" />
+        </div>
+    </div>
+    <div style="margin-top: 20px">
+        <div>
+            <RadzenLabel Text="Description" />
+        </div>
+        <div>
+            <RadzenTextArea Name="Description" @bind-Value="Beer.Description" Cols="30" Rows="3" style="width: 100%" />
+            <RadzenRequiredValidator Component="Description" Text="Name is required" Popup="false" />
+            <RadzenLengthValidator Component="Description" Min="3" Text="Name should be at least 3 characters" />
+            <RadzenLengthValidator Component="Description" Max="3000" Text="Name should be at most 50 characters" />
+        </div>
+    </div>
+    <div>
+        <RadzenImage Path="@BeerLogoUrl" Style="width:200px;" />
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-12">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" Style="margin-bottom: 10px; width: 150px" />
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Style="margin-bottom: 10px; width: 150px" Text="Cancel" Click="@((args) => DialogService.Close(false))" />
+        </div>
+    </div>
+</RadzenTemplateForm>
+

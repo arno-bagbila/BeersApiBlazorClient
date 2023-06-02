@@ -1,0 +1,40 @@
+﻿@page "/colors"
+@using BeersApiBlazorClient.Elements
+@inherits BeersApiBlazorClient.Pages.CodeBehind.ColorOverviewBase
+
+@if (ShowError)
+{
+    <div class="alert alert-danger" role="alert" id="@ElementIds.ColorOverviewError">
+        <p>@Error</p>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-10" id="@ElementIds.ColorOverviewTitle"><h4>Colors</h4></div>
+</div>
+
+<br />
+
+@if (Colors == null || !Colors.Any())
+{
+    <p><em id="@ElementIds.ColorOverviewLoading">Loading ...</em></p>
+}
+else
+{
+    <div id="@ElementIds.ColorOverviewGrid">
+        <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowSorting="true" Data="@Colors" TItem="Models.Input.Colors.Color">
+            <Columns>
+                <RadzenGridColumn Width="80px" TItem="Models.Input.Colors.Color" Property="Name" Title="Name"></RadzenGridColumn>
+                <RadzenGridColumn Width="20px" TItem="Models.Input.Colors.Color" Title="Beers" TextAlign="TextAlign.Center">
+                    <Template Context="color">
+                        <RadzenButton Text="Beers" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Info">
+                        </RadzenButton>
+                    </Template>
+                </RadzenGridColumn>
+            </Columns>
+        </RadzenGrid>
+    </div>
+}
+
+
+

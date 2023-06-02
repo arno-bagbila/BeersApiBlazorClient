@@ -1,0 +1,26 @@
+﻿@inherits DeleteCategoryDialogBase
+
+@if (ShowDeleteDialog)
+{
+    <div>
+        @if (ShowErrorMessage)
+        {
+            <div class="alert alert-danger" role="alert">
+                <p>@ErrorMessage</p>
+            </div>
+        }
+        <p>Are you sure you want to delete category: @Name</p>
+
+        <button @onclick="() => DeleteCategory(Id)" class="btn btn-danger">Delete</button>
+        <button @onclick="Cancel" class="btn btn-secondary">Cancel</button>
+    </div>
+}
+else
+{
+    <div class="alert alert-success" role="alert">
+        Thanks Category @Name, has been successfully deleted.<br />
+        <button class="btn btn-primary" @onclick="Done">Done</button>
+    </div>
+}
+
+

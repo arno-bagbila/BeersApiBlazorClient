@@ -1,0 +1,73 @@
+﻿@using BeersApiBlazorClient.Models.Common.Comments
+@inherits BeerDialogBase
+
+<RadzenCard Style="margin-bottom: 20px;">
+    <div class="row">
+        <div class="col-md-6">
+            <RadzenImage Path="@BeerLogoUrl" Style="width:200px;" />
+        </div>
+        <div class="col-md-6">
+            <div>Alcohol Level:</div>
+            <b>@(BeerAlcoholLevel + "%")</b>
+            <div style="margin-top: 20px">Tiwoo Rating:</div>
+            <b>@(BeerTiwooRating + "/5")</b>
+            <div style="margin-top: 20px">Category:</div>
+            <b>@BeerCategoryName</b>
+            <div style="margin-top: 20px">Color:</div>
+            <b>@BeerColorName</b>
+            <div style="margin-top: 20px">Country:</div>
+            <b>@BeerCountryName</b>
+            <div style="margin-top: 20px">Flavours:</div>
+            <ul>
+                @foreach (var flavourName in BeerFlavourNames)
+                {
+                    <li>@flavourName</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-12">
+            <h3>Description</h3>
+            <p>@BeerDescription</p>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-12">
+            <h3>Comments</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    @foreach (var comment in BeerComments)
+                    {
+                        <div class="card">
+                            <div class="card-header">
+                                <img class="img-thumbnail" src="http://127.0.0.1:10000/devstoreaccount1/beersapilogourls/beerlover_default.jpg" alt="..." width="50" height="60"/>
+                                <b>@comment.UserFirstName</b> - <span>@comment.DatePosted.ToString("dd MMMM, yyyy")</span>
+                            </div>
+                            <div class="card-body">@comment.Body</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (BeersApiUser.RoleName == "BeersApiAdmin")
+    {
+        <RadzenTemplateForm Data="@Comment" Submit="@(async(Comment comment) => { await Submit(comment); })">
+            <RadzenFieldset Text="Add Comment">
+                <RadzenTextArea Cols="60" Rows="3" Name="Body" @bind-Value="Comment.Body" />
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Submit" Style="margin-bottom: 10px; width: 150px" />
+            </RadzenFieldset>
+        </RadzenTemplateForm>
+     }
+
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-12">
+            <RadzenButton Click="@((args) => DialogService.Close(true))" Text="Close" Style="margin-bottom: 10px; width: 150px" />
+            @if (BeersApiUser.RoleName == "BeersApiAdmin")
+            {
+                <RadzenButton Click="@((args) => ShowEditBeerDialog())" ButtonStyle="ButtonStyle.Secondary" Text="Edit" Style="margin-bottom: 10px; width: 150px" />
+            }
+        </div>
+    </div>
+</RadzenCard>

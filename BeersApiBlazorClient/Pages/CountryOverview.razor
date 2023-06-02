@@ -1,0 +1,46 @@
+﻿@page "/countries"
+@using BeersApiBlazorClient.Elements
+@inherits BeersApiBlazorClient.Pages.CodeBehind.CountryOverviewBase
+
+@if (ShowError)
+{
+    <div class="alert alert-danger" role="alert" id="@ElementIds.CountryOverviewError">
+        <p>@Error</p>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-10" id="@ElementIds.CountryOverviewTitle"><h4>Countries</h4></div>
+</div>
+
+<br />
+
+@if (Countries == null || !Countries.Any())
+{
+    <p><em id="@ElementIds.CountryOverviewLoading">Loading ...</em></p>
+}
+else
+{
+    <div id="@ElementIds.CountryOverviewGrid">
+        <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowSorting="true" Data="@Countries" TItem="Models.Input.Countries.Country">
+            <Columns>
+                <RadzenGridColumn Width="60px" TItem="Models.Input.Countries.Country" Property="Name" Title="Name"></RadzenGridColumn>
+                <RadzenGridColumn Width="20px" TItem="Models.Input.Countries.Country" Property="Code" Title="Flags">
+                    <Template Context="country">
+                        @{ var pa = $"https://www.countryflags.io/{country.Code}/flat/64.png"; }
+                        <RadzenImage Path=@pa />
+                    </Template>
+                </RadzenGridColumn>
+                <RadzenGridColumn Width="20px" TItem="Models.Input.Countries.Country" Title="Beers" TextAlign="TextAlign.Center">
+                    <Template Context="color">
+                        <RadzenButton Text="Beers" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Info">
+                        </RadzenButton>
+                    </Template>
+                </RadzenGridColumn>
+            </Columns>
+        </RadzenGrid>
+    </div>
+}
+
+
+
